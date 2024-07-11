@@ -10,8 +10,8 @@ function TodoItem(props) {
     >
       <input
         type="checkbox"
-        onChange={() => handleTodoCheckBoxChange(todo)}
         checked={todo.isComplete}
+        onChange={(ev) => handleTodoCheckBoxChange(todo._id, ev.target.checked)}
       />
       <span className="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">
         {todo.title}

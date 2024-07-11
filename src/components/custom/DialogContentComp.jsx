@@ -10,6 +10,7 @@ import TodoItem from "./TodoItem";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+import { Label } from "../ui/label";
 
 function DialogContentComp({
   task,
@@ -22,10 +23,32 @@ function DialogContentComp({
     title: task.title,
     description: task.description,
     body: task.body,
+    todoList: task.todoList,
   });
 
   const activeTodos = todoList.filter((todo) => !todo.isComplete);
   const completedTodos = todoList.filter((todo) => todo.isComplete);
+
+  function handleTodoChange(todoId, field, value) {
+    const updatedTodoList = editedTask.todoList.map((todo) =>
+      todo._id === todoId ? { ...todo, [field]: value } : todo
+    );
+    setEditedTask({ ...editedTask, todoList: updatedTodoList });
+  }
+
+  function addTodo() {
+    setEditedTask({
+      ...editedTask,
+      todoList: [...editedTask.todoList, { title: "", isComplete: false }],
+    });
+  }
+
+  function removeTodo(todoId) {
+    const updatedTodoList = editedTask.todoList.filter(
+      (todo) => todo._id !== todoId
+    );
+    setEditedTask({ ...editedTask, todoList: updatedTodoList });
+  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -48,9 +71,9 @@ function DialogContentComp({
 
   return (
     <>
-      {!isEdit ? (
-        <div>
-          <DialogContent className="p-0">
+      <DialogContent className="p-0">
+        {!isEdit ? (
+          <div>
             <div className="flex flex-col gap-5 w-full max-w-full bg-white border border-gray-200 rounded-lg shadow p-8 dark:bg-gray-800 dark:border-gray-700">
               {/* Title */}
               <DialogHeader>
@@ -96,11 +119,9 @@ function DialogContentComp({
                 </Button>
               </div>
             </div>
-          </DialogContent>
-        </div>
-      ) : (
-        <div>
-          <DialogContent className="p-0">
+          </div>
+        ) : (
+          <div>
             <div className="flex flex-col gap-5 w-full max-w-full bg-white border border-gray-200 rounded-lg shadow p-8 dark:bg-gray-800 dark:border-gray-700">
               {/* Edit form */}
               <DialogHeader>
@@ -156,6 +177,42 @@ function DialogContentComp({
                   className="dark:bg-gray-700 dark:text-white"
                 />
               </div>
+              <div>
+                <Label>Todo List</Label>
+                {editedTask.todoList.map((todo) => (
+                  <div className="flex items-center space-x-1 space-y-2">
+                    <Input
+                      type="text"
+                      placeholder="Todo title..."
+                      value={todo.title}
+                      onChange={(ev) =>
+                        handleTodoChange(todo._id, "title", ev.target.value)
+                      }
+                    />
+                    <Input
+                      type="checkbox"
+                      checked={todo.isComplete}
+                      onChange={(ev) =>
+                        handleTodoChange(
+                          todo._id,
+                          "isComplete",
+                          ev.target.checked
+                        )
+                      }
+                    />
+                    <Button
+                      type="button"
+                      onClick={() => removeTodo(todo._id)}
+                      className="bg-red-500 hover:bg-red-700 text-white"
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                ))}
+                <Button type="button" onClick={addTodo} className="mt-2">
+                  Add Todo
+                </Button>
+              </div>
               <div className="flex gap-3">
                 <Button
                   onClick={handleSave}
@@ -171,9 +228,9 @@ function DialogContentComp({
                 </Button>
               </div>
             </div>
-          </DialogContent>
-        </div>
-      )}
+          </div>
+        )}
+      </DialogContent>
     </>
   );
 }

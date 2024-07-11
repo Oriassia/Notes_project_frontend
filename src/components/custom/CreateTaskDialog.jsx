@@ -12,19 +12,28 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
-import { toast } from "../ui/use-toast";
 import { AuthContext } from "../context/AuthContext";
+import { toastUtils as toast } from "@/lib/utils";
+import { CirclePlus } from "lucide-react";
+import { CircleMinus } from "lucide-react";
 
-const CreateTaskDialog = ({ isOpen, onClose, onTaskCreated }) => {
-  const [newTodoList, setNewTodoList] = useState([
-    { title: "", isComplete: false },
-  ]);
-  const { loggedInUser } = useContext(AuthContext);
+const CreateTaskDialog = ({
+  isOpen,
+  onTaskCreated,
+  // createTaskDialogIsOpen,
+  setCreateTaskDialogIsOpen,
+}) => {
+  const [newTodoList, setNewTodoList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  function handleTodoChange(index, field, value) {
+  function onClose() {
+    setCreateTaskDialogIsOpen(false);
+    setNewTodoList([]);
+  }
+
+  function handleTodoChange(index, title) {
     const updatedTodoList = newTodoList.map((todo, i) =>
-      i === index ? { ...todo, [field]: value } : todo
+      i === index ? { ...todo, title: title } : todo
     );
     setNewTodoList(updatedTodoList);
   }
@@ -52,12 +61,18 @@ const CreateTaskDialog = ({ isOpen, onClose, onTaskCreated }) => {
     try {
       const { data } = await api.post("/tasks", newTask);
       onTaskCreated(data.task);
+      onClose();
       toast({
         title: "Task created successfully",
         description: `${newTask.title}`,
+        status: "success",
       });
-      onClose();
     } catch (error) {
+      toast({
+        title: "Error creating task",
+        description: error.message || "An error occurred",
+        status: "error",
+      });
       console.error("Error creating task:", error);
     } finally {
       setIsLoading(false);
@@ -77,47 +92,46 @@ const CreateTaskDialog = ({ isOpen, onClose, onTaskCreated }) => {
             <Input name="title" required />
           </div>
           <div>
-            <Label htmlFor="description">Description</Label>
-            <Textarea name="description" required />
+            <Label htmlFor="description" className={"flex gap-1 pb-1"}>
+              <div className="">Description</div>
+              <div className="text-gray-500 text-xs">(optional)</div>
+            </Label>
+            <Textarea name="description" />
           </div>
+          {/* <div>
+            <Label htmlFor="body" className={"flex gap-1 pb-1"}>
+              <div className="">Body</div>
+              <div className="text-gray-500 text-xs">(optional)</div>
+            </Label>{" "}
+            <Textarea name="body" />
+          </div> */}
           <div>
-            <Label htmlFor="body">Body</Label>
-            <Textarea name="body" required />
-          </div>
-          <div>
-            <Label>Todo List</Label>
-            {newTodoList.map((todo, index) => (
-              <div
-                key={index}
-                className="flex items-center space-x-1 space-y-2"
-              >
-                <Input
-                  type="text"
-                  placeholder="Todo title..."
-                  value={todo.title}
-                  onChange={(ev) =>
-                    handleTodoChange(index, "title", ev.target.value)
-                  }
-                />
-                <Input
-                  type="checkbox"
-                  checked={todo.isComplete}
-                  onChange={(ev) =>
-                    handleTodoChange(index, "isComplete", ev.target.checked)
-                  }
-                />
-                <Button
-                  type="button"
-                  onClick={() => removeTodo(index)}
-                  className="bg-red-500 hover:bg-red-700 text-white"
-                >
-                  Remove
-                </Button>
-              </div>
-            ))}
-            <Button type="button" onClick={addTodo} className="mt-2">
+            <Label htmlFor="description" className={"flex gap-1 pb-1"}>
+              <div className="">Todo List</div>
+              <div className="text-gray-500 text-xs">(optional)</div>
+            </Label>
+            <ul className="flex flex-col space-y-2">
+              {newTodoList.map((todo, index) => (
+                <li key={index} className="flex items-center space-x-3">
+                  <Input
+                    type="text"
+                    placeholder="Todo title..."
+                    value={todo.title}
+                    onChange={(ev) =>
+                      handleTodoChange(index, "title", ev.target.value)
+                    }
+                  />
+                  <CircleMinus className="" onClick={() => removeTodo(index)} />
+                </li>
+              ))}
+            </ul>
+            <div
+              onClick={addTodo}
+              className="flex gap-1 mt-3 items-center text-sm"
+            >
+              <CirclePlus size={20} />
               Add Todo
-            </Button>
+            </div>
           </div>
           <DialogFooter className="sm:justify-start">
             <Button type="submit" disabled={isLoading}>

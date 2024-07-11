@@ -4,11 +4,6 @@ import { AuthContext } from "../context/AuthContext";
 function MyProfile() {
   const { loggedInUser: user } = useContext(AuthContext);
 
-  //   useEffect(() => {
-  //     const user = loggedInUser;
-  //     console.log(user);
-  //   }, []);
-
   // Helper function to get initials if image doesn't exist
   const getInitials = (firstName, lastName) => {
     if (!firstName || !lastName) return "";
@@ -16,7 +11,7 @@ function MyProfile() {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden">
+    <div className="my-10 max-w-md mx-auto bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden">
       <div className="px-6 py-4">
         <div className="flex items-center justify-center">
           {user?.image ? (
@@ -33,7 +28,7 @@ function MyProfile() {
         </div>
         <div className="mt-4 text-center">
           <h2 className="text-xl font-bold">{`${user?.firstName} ${user?.lastName}`}</h2>
-          <p className="text-gray-600 dark:text-gray-300">@{user?.username}</p>
+          <p className="text-gray-600 dark:text-gray-300">{user.username}</p>
           <p className="text-gray-600 dark:text-gray-300">{user?.email}</p>
         </div>
       </div>
@@ -42,7 +37,6 @@ function MyProfile() {
         <p className="text-gray-600 dark:text-gray-300">
           Account created: {new Date(user?.createdAt).toLocaleDateString()}
         </p>
-        <p className="text-gray-600 dark:text-gray-300">Role: {user?.role}</p>
       </div>
     </div>
   );

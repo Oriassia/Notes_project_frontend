@@ -1,5 +1,6 @@
 import { clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { toast } from "../components/ui/use-toast";
 
 export function cn(...inputs) {
   return twMerge(clsx(inputs))
@@ -40,3 +41,28 @@ function _parseJwt(token) {
     signature,
 };
 }
+
+
+export const toastUtils = {
+  success: (message) => {
+    toast({
+      title: message,
+      status: "success",
+      style: {
+        backgroundColor: "lightgreen",
+        color: "black",
+      },
+    });
+  },
+  error: (message) => {
+    toast({
+      title: message,
+      status: "error",
+      style: {
+        backgroundColor: "lightcoral",
+        color: "black",
+      },
+    });
+  },
+};
+

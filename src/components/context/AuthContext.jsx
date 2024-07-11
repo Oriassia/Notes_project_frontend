@@ -1,6 +1,6 @@
-import { formatJWTTokenToUser } from "@/lib/utils";
 import api from "@/services/api.service";
 import React, { createContext, useEffect, useState } from "react";
+import { toast } from "../ui/use-toast";
 
 export const AuthContext = createContext();
 
@@ -21,6 +21,7 @@ const AuthProvider = ({ children }) => {
         const { data } = await api.get("/users");
         setLoggedInUser({
           userId: data._id,
+          username: data.username,
           firstName: data.firstName,
           lastName: data.lastName,
           email: data.email,
@@ -33,15 +34,21 @@ const AuthProvider = ({ children }) => {
     }
   }
 
-  const login = async (userIdAndToken) => {
-    localStorage.setItem("token", userIdAndToken.token);
+  const login = async (token) => {
+    localStorage.setItem("token", token);
     const { data } = await api.get("/users");
     setLoggedInUser({
       userId: data._id,
+      username: data.username,
       firstName: data.firstName,
       lastName: data.lastName,
       email: data.email,
-      token: userIdAndToken.token,
+      token: token,
+      createdAt: data.createdAt,
+    });
+    toast({
+      title: "logged in sucssfully",
+      description: `${data.firstName} ${data.lastName}`,
     });
   };
 
