@@ -2,26 +2,22 @@
 
 Deployed at https://notes-project-backend.onrender.com
 
-Trellis - Trello Clone Web App
+Task manager Web App
 
-Trellis is a full-stack web application built with Vue for the frontend and Node.js for the backend, with a MongoDB database. The application is a clone of the popular task management app Trello, allowing users to create boards, lists, and cards to manage their tasks and projects. Features
-
-Some of the key features of Trellis include:
-
-Create, edit, and delete boards, lists, and cards Move cards between lists and boards Add labels and due dates to cards Collaborate with other users on boards and cards Search for boards and cards by name or user Customize board backgrounds and user avatars
+Task manager is a full-stack web application built with React for the frontend and Node.js for the backend, with a MongoDB database. The application is a task management app, allowing users to create task and adding todo list for each task.
 
 Technologies Used
 
-Trellis was built using a range of technologies, including:
+Task manager was built using a range of technologies, including:
 
-Vue for the frontend Node.js for the backend MongoDB for the database Mongoose for object-document mapping Socket.IO for real-time communication JWT for authentication and authorization
+React for the frontend Node.js for the backend MongoDB for the database Mongoose for object-document mapping JWT for authentication and authorization
 
 Getting Started
 
-To get started with Trellis, you'll need to have the following installed on your local machine:
+To get started with Task manager, you'll need to have the following installed on your local machine:
 
 Node.js and npm MongoDB
 
 Once you have these dependencies installed, you can clone the repository and run it.
 
-Contributions to Trellis are welcome! To contribute, simply fork the repository, create a new branch with your changes, and submit a pull request.
+Contributions to Task manager are welcome! To contribute, simply fork the repository, create a new branch with your changes, and submit a pull request.
