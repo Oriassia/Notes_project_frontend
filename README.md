@@ -1,6 +1,6 @@
 
 
-Deployed at https://trellis-laif.onrender.com/#/](https://notes-project-backend.onrender.com
+Deployed at https://notes-project-backend.onrender.com
 
 Trellis - Trello Clone Web App
 
